@@ -1,21 +1,17 @@
-const Telegraf = require('telegraf')
+const Telegraf = require('../')
+const { Markup } = require('../')
 
-const app = new Telegraf('402660687:AAE783zHNDSyXg8RM_SvQxxufVk648zvkOk')
-app.command('start', ({ from, reply }) => {
-  console.log('start', from)
-  return reply('Welcome!')
-})
-app.hears('hi', (ctx) => ctx.reply('Hey there!'))
-app.on('sticker', (ctx) => ctx.reply('👍'))
-app.startPolling()
-const Telegraf = require('telegraf')
-const { reply } = Telegraf
+const replyOptions = Markup.inlineKeyboard([
+  Markup.urlButton('❤️', 'http://telegraf.js.org'),
+  Markup.callbackButton('Delele', 'delete')
+]).extra()
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
-bot.command('/oldschool', (ctx) => ctx.reply('Hello'))
-bot.command('/modern', ({ reply }) => reply('Yo'))
-bot.command('/hipster', reply('λ'))
+bot.on('message', (ctx) => ctx.telegram.sendCopy(ctx.from.id, ctx.message, replyOptions))
+bot.action('delete', ({ deleteMessage }) => deleteMessage())
 bot.startPolling()
+
+
 
 /*  OpenShift sample Node application
 var express = require('express'),
