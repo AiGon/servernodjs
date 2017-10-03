@@ -1,5 +1,23 @@
-/*
-//  OpenShift sample Node application
+const Telegraf = require('telegraf')
+
+const app = new Telegraf('402660687:AAE783zHNDSyXg8RM_SvQxxufVk648zvkOk')
+app.command('start', ({ from, reply }) => {
+  console.log('start', from)
+  return reply('Welcome!')
+})
+app.hears('hi', (ctx) => ctx.reply('Hey there!'))
+app.on('sticker', (ctx) => ctx.reply('👍'))
+app.startPolling()
+const Telegraf = require('telegraf')
+const { reply } = Telegraf
+
+const bot = new Telegraf(process.env.BOT_TOKEN)
+bot.command('/oldschool', (ctx) => ctx.reply('Hello'))
+bot.command('/modern', ({ reply }) => reply('Yo'))
+bot.command('/hipster', reply('λ'))
+bot.startPolling()
+
+/*  OpenShift sample Node application
 var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
@@ -105,30 +123,3 @@ console.log('Server running on http://%s:%s', ip, port);
 
 module.exports = app ;
 */
-
-const TOKEN = process.env.TELEGRAM_TOKEN || '402660687:AAE783zHNDSyXg8RM_SvQxxufVk648zvkOk';
-const TelegramBot = require('..');
-// See https://developers.openshift.com/en/node-js-environment-variables.html
-const options = {
-  webHook: {
-    port: process.env.OPENSHIFT_NODEJS_PORT,
-    host: process.env.OPENSHIFT_NODEJS_IP,
-    // you do NOT need to set up certificates since OpenShift provides
-    // the SSL certs already (https://<app-name>.rhcloud.com)
-  },
-};
-// OpenShift routes from port :443 to OPENSHIFT_NODEJS_PORT
-const domain = process.env.OPENSHIFT_APP_DNS;
-const url = `${domain}:443`;
-const bot = new TelegramBot(TOKEN, options);
-
-
-// This informs the Telegram servers of the new webhook.
-// Note: we do not need to pass in the cert, as it already provided
-bot.setWebHook(`${url}/bot${TOKEN}`);
-
-
-// Just to ping!
-bot.on('message', function onMessage(msg) {
-  bot.sendMessage(msg.chat.id, 'I am alive on OpenShift!');
-});
