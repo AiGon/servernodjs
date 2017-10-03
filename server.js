@@ -6,7 +6,7 @@ const replyOptions = Markup.inlineKeyboard([
   Markup.callbackButton('Delele', 'delete')
 ]).extra()
 
-const bot = new Telegraf(process.env.BOT_TOKEN)
+const bot = new Telegraf('402660687:AAE783zHNDSyXg8RM_SvQxxufVk648zvkOk')
 bot.on('message', (ctx) => ctx.telegram.sendCopy(ctx.from.id, ctx.message, replyOptions))
 bot.action('delete', ({ deleteMessage }) => deleteMessage())
 bot.startPolling()
